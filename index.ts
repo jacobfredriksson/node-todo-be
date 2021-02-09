@@ -6,7 +6,11 @@ app.get("/example", (req, res) =>
   res.send("Express + TypeScript Servera Wadap brothaaaasa ")
 );
 
-app.post("/", (req, res) => {});
+app.get("/", (req, res) => {
+  res.json({
+    message: "Yoyo",
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);
