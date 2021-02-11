@@ -7,13 +7,9 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 
-app.get("/example", (req, res) =>
-  res.send("Express + TypeScript Servera Wadap brothaaaasa ")
-);
-
 app.get("/", (req, res) => {
   res.json({
-    message: "Yoyo",
+    message: "To see the list of items, go to /items.",
   });
 });
 
@@ -24,15 +20,17 @@ app.get("/items", (req, res) => {
 app.post("/items/add", (req, res) => {
   const newItem = { id: uuidv4(), todo: req.body.todo };
   items.push(newItem);
-  console.log({ items });
+  res.json(items);
 });
 
 app.post("/items/delete", (req, res) => {
   const itemId = req.body.id;
-  console.log({ itemId });
+  // Get the index of the item
   const index = items.findIndex((item) => item.id === itemId);
+  // Remove the item from the list
   items.splice(index, 1);
-  console.log(items);
+  // Return the new list
+  res.json(items);
 });
 
 app.listen(PORT, () => {
