@@ -21,10 +21,18 @@ app.get("/items", (req, res) => {
   res.json(items);
 });
 
-app.post("/items", (req, res) => {
-  const newItem = { id: uuidv4(), ...req.body };
+app.post("/items/add", (req, res) => {
+  const newItem = { id: uuidv4(), todo: req.body.todo };
   items.push(newItem);
   console.log({ items });
+});
+
+app.post("/items/delete", (req, res) => {
+  const itemId = req.body.id;
+  console.log({ itemId });
+  const index = items.findIndex((item) => item.id === itemId);
+  items.splice(index, 1);
+  console.log(items);
 });
 
 app.listen(PORT, () => {
