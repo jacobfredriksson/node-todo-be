@@ -21,8 +21,10 @@ app.get("/items", (req, res) => {
 });
 
 app.post("/items", (req, res) => {
-  console.log(req.body)
-})
+  const newItem = req.body;
+  items.push(newItem);
+  console.log({ items });
+});
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);
