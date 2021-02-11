@@ -1,4 +1,5 @@
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
 import items from "./items";
 
 const app = express();
@@ -21,7 +22,7 @@ app.get("/items", (req, res) => {
 });
 
 app.post("/items", (req, res) => {
-  const newItem = req.body;
+  const newItem = { id: uuidv4(), ...req.body };
   items.push(newItem);
   console.log({ items });
 });
