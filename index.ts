@@ -1,6 +1,5 @@
 import express from "express";
 import database from "./firebase";
-import items from "./items";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -29,17 +28,23 @@ app.get("/items", (req, res) => {
     });
 });
 
-app.post("/items/add", (req, res) => {
+app.post("/items/create", (req, res) => {
   const newItem = { todo: req.body.todo };
-
   database.collection("todos").add(newItem);
-
   res.json({ status: "OK" });
 });
 
 app.post("/items/delete", (req, res) => {
   const itemId = req.body.id;
   database.collection("todos").doc(itemId).delete();
+  res.json({ status: "OK" });
+});
+
+app.post("/items/update", (req, res) => {
+  const itemId = req.body.id;
+  const newEdit = req.body.todo;
+  database.collection("todos").doc(itemId).update({ todo: newEdit });
+
   res.json({ status: "OK" });
 });
 
