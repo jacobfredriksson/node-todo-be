@@ -1,4 +1,5 @@
 import express from "express";
+import database from "./firebase";
 import { v4 as uuidv4 } from "uuid";
 import items from "./items";
 
@@ -8,6 +9,22 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
+  database
+    .collection("todos")
+    .add({
+      ...items[0],
+    })
+    .then((res) => {
+      database
+        .collection("todos")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()}`);
+          });
+        });
+    });
+
   res.json({
     message: "To see the list of items, go to /items.",
   });
