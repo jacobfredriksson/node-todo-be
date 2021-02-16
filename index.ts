@@ -14,16 +14,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/items", (req, res) => {
-  database.collection("todos").get().then((snapshot) => {
-    let result: object[] = []
+  database
+    .collection("todos")
+    .get()
+    .then((snapshot) => {
+      let result: object[] = [];
 
-    snapshot.forEach((doc) => {
-      const document = {id: doc.id, todo: doc.data().todo}
-      result.push(document)
+      snapshot.forEach((doc) => {
+        const document = { id: doc.id, todo: doc.data().todo };
+        result.push(document);
+      });
+
+      res.json(result);
     });
-
-    res.json(result)
-  });
 });
 
 app.post("/items/add", (req, res) => {
@@ -36,12 +39,8 @@ app.post("/items/add", (req, res) => {
 
 app.post("/items/delete", (req, res) => {
   const itemId = req.body.id;
-  // Get the index of the item
-  const index = items.findIndex((item) => item.id === itemId);
-  // Remove the item from the list
-  items.splice(index, 1);
-  // Return the new list
-  res.json(items);
+  database.collection("todos").doc(itemId).delete();
+  res.json({ status: "OK" });
 });
 
 app.listen(PORT, () => {
