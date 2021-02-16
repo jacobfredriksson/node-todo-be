@@ -14,7 +14,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/items", (req, res) => {
-  res.json(items);
+  database.collection("todos").get().then((snapshot) => {
+    let result: object[] = []
+
+    snapshot.forEach((doc) => {
+      const document = {id: doc.id, todo: doc.data().todo}
+      result.push(document)
+    });
+
+    res.json(result)
+  });
 });
 
 app.post("/items/add", (req, res) => {
