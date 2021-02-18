@@ -41,16 +41,23 @@ app.post("/items/create", (req, res) => {
 
 app.post("/items/delete", (req, res) => {
   const itemId = req.body.id;
-  database.collection("todos").doc(itemId).delete();
-  res.json({ status: "OK" });
+  try {
+    database.collection("todos").doc(itemId).delete();
+    res.json({ status: "OK" });
+  } catch (error) {
+    handleError(error, res);
+  }
 });
 
 app.post("/items/update", (req, res) => {
   const itemId = req.body.id;
   const newEdit = req.body.todo;
-  database.collection("todos").doc(itemId).update({ todo: newEdit });
-
-  res.json({ status: "OK" });
+  try {
+    database.collection("todos").doc(itemId).update({ todo: newEdit });
+    res.json({ status: "OK" });
+  } catch (error) {
+    handleError(error, res);
+  }
 });
 
 app.listen(PORT, () => {
