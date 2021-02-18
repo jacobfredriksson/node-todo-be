@@ -30,8 +30,12 @@ app.get("/items", (req, res) => {
 
 app.post("/items/create", (req, res) => {
   const newItem = { todo: req.body.todo };
-  database.collection("todos").add(newItem);
-  res.json({ status: "OK" });
+  try {
+    database.collection("todos").add(newItem);
+    res.json({ status: "OK" });
+  } catch (error) {
+    res.json({ status: "ERROR", message: error });
+  }
 });
 
 app.post("/items/delete", (req, res) => {
