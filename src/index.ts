@@ -1,6 +1,11 @@
 import express from "express";
 import database from "./firebase";
+
+// Utils
 import handleError from "./lib/handleError";
+
+// Types
+import { Item } from "./types";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -13,12 +18,13 @@ app.get("/", (req, res) => {
   });
 });
 
+
 app.get("/items", (req, res) => {
   database
     .collection("todos")
     .get()
     .then((snapshot) => {
-      let result: object[] = [];
+      let result: Item[] = [];
 
       snapshot.forEach((doc) => {
         const document = { id: doc.id, todo: doc.data().todo };
@@ -39,10 +45,13 @@ app.post("/items/create", (req, res) => {
   }
 });
 
-app.post("/items/delete", (req, res) => {
+
+app.post("/items/delete", async (req, res) => {
   const itemId = req.body.id;
+
   try {
-    database.collection("todos").doc(itemId).delete();
+    const item = database.collection("todos").doc(itemId);
+    item.delete()
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);
