@@ -1,5 +1,6 @@
 import express from "express";
 import database from "./firebase";
+import handleError from "./lib/handleError";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -34,7 +35,7 @@ app.post("/items/create", (req, res) => {
     database.collection("todos").add(newItem);
     res.json({ status: "OK" });
   } catch (error) {
-    res.json({ status: "ERROR", message: error });
+    handleError(error, res);
   }
 });
 
