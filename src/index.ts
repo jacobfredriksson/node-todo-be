@@ -3,6 +3,7 @@ import database from "./firebase";
 
 // Utils
 import handleError from "./lib/handleError";
+import { schema } from "./lib/schema";
 
 // Types
 import { Item } from "./types";
@@ -17,7 +18,6 @@ app.get("/", (req, res) => {
     message: "To see the list of items, go to /items.",
   });
 });
-
 
 app.get("/items", (req, res) => {
   database
@@ -35,23 +35,23 @@ app.get("/items", (req, res) => {
     });
 });
 
-app.post("/items/create", (req, res) => {
+app.post("/items/create", async (req, res) => {
   const newItem = { todo: req.body.todo };
   try {
-    database.collection("todos").add(newItem);
+    const value = await schema.validateAsync(newItem);
+    database.collection("todos").add(value);
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);
   }
 });
 
-
 app.post("/items/delete", async (req, res) => {
   const itemId = req.body.id;
 
   try {
     const item = database.collection("todos").doc(itemId);
-    item.delete()
+    item.delete();
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);
