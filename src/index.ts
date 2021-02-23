@@ -51,19 +51,23 @@ app.post("/items/delete", async (req, res) => {
 
   try {
     const value = await schema.delete.validateAsync(itemId);
-    const item = database.collection("todos").doc(value);
-    item.delete();
+    database.collection("todos").doc(value).delete();
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);
   }
 });
 
-app.post("/items/update", (req, res) => {
-  const itemId = req.body.id;
-  const newEdit = req.body.todo;
+app.post("/items/update", async (req, res) => {
+  const id = req.body.id;
+  const todo = req.body.todo;
   try {
-    database.collection("todos").doc(itemId).update({ todo: newEdit });
+    const value = await schema.update.validateAsync({ id, todo });
+    await database
+      .collection("todos")
+      .doc(value.id)
+      .update({ todo: value.todo })
+      .catch((error) => handleError(error, res));
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);
