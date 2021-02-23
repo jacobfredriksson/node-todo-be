@@ -35,7 +35,7 @@ export const handleError: HandleError = (error, res) => {
       res.json({ status: "ERROR", message: "Invalid request body" });
       break;
     default:
-      res.json({ status: "ERROR",  message: error.details[0].message });
+      res.json({ status: "ERROR", message: error.details[0].message, error });
       break;
   }
 };

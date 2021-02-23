@@ -38,7 +38,7 @@ app.get("/items", (req, res) => {
 app.post("/items/create", async (req, res) => {
   const newItem = { todo: req.body.todo };
   try {
-    const value = await schema.validateAsync(newItem);
+    const value = await schema.create.validateAsync(newItem);
     database.collection("todos").add(value);
     res.json({ status: "OK" });
   } catch (error) {
@@ -50,7 +50,8 @@ app.post("/items/delete", async (req, res) => {
   const itemId = req.body.id;
 
   try {
-    const item = database.collection("todos").doc(itemId);
+    const value = await schema.delete.validateAsync(itemId);
+    const item = database.collection("todos").doc(value);
     item.delete();
     res.json({ status: "OK" });
   } catch (error) {
