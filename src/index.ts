@@ -67,7 +67,7 @@ app.post("/items/update", async (req, res) => {
       .collection("todos")
       .doc(value.id)
       .update({ todo: value.todo })
-      .catch((error) => handleError(error, res));
+
     res.json({ status: "OK" });
   } catch (error) {
     handleError(error, res);

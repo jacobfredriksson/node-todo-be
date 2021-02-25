@@ -30,12 +30,15 @@ type HandleError = (
 ) => void;
 
 export const handleError: HandleError = (error, res) => {
+  const isFirebaseError = error.name?.includes("FirebaseError")
+  console.log({isFirebaseError}, {error})
+
   switch (error.code) {
     case "invalid-argument":
       res.json({ status: "ERROR", message: "Invalid request body" });
       break;
     default:
-      res.json({ status: "ERROR", error });
+      res.json({ status: "ERROR", error: isFirebaseError ? error : error.details[0].message })
       break;
   }
 };
