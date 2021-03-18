@@ -70,7 +70,7 @@ const DELETE: Route = {
 
 const UPDATE: Route = {
   type: "post",
-  path: "/items/delete",
+  path: "/items/update",
   callback: async (req, res) => {
     const id = req.body.id;
     const todo = req.body.todo;
